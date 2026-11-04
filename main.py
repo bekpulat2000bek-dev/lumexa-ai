@@ -1,6 +1,8 @@
 
+
 import asyncio
 import os
+import logging
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
@@ -9,9 +11,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+logging.basicConfig(level=logging.INFO)
+
 TOKEN = os.getenv("BOT_TOKEN")
 
-bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
 
@@ -19,16 +22,16 @@ dp = Dispatcher()
 async def start(message: Message):
     await message.answer(
         "✨ Welcome to LUMEXA AI!\n\n"
-        "Your intelligent assistant is ready.\n"
-        "Send me a message to get started."
+        "I am your intelligent assistant.\n"
+        "Send me a message to get started!"
     )
 
 
 @dp.message(F.text)
 async def chat(message: Message):
     await message.answer(
-        "Hello! I'm LUMEXA AI. 🤖\n\n"
-        "AI connection is coming soon!"
+        "Hello! 👋 I am LUMEXA.\n\n"
+        "My AI brain is being connected. Stay tuned! 🚀"
     )
 
 
@@ -36,9 +39,15 @@ async def main():
     if not TOKEN:
         raise ValueError("BOT_TOKEN is missing!")
 
-    await dp.start_polling(bot)
+    bot = Bot(token=TOKEN)
+
+    try:
+        print("LUMEXA is starting...")
+        await dp.start_polling(bot)
+    finally:
+        await bot.session.close()
 
 
 if __name__ == "__main__":
     asyncio.run(main())
-  
+            
